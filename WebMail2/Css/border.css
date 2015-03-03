@@ -1,0 +1,24 @@
+﻿/*基础样式*/
+.clear,
+.clear5,
+.clear10,
+.clear20 { clear: both;display: block;overflow: hidden; border:none;}
+.clear5{ height:5px;}
+.clear10{ height:10px;}
+.clear20{ height:20px;}
+html,
+body,
+form{ font-size:12px; line-height:20px; font-family:"lucida Grande", Verdana; color:#333; height:100%; width:100%; padding:0px; margin:0px; background-repeat:no-repeat;}
+a{text-decoration:none; color:#3d5e86;}
+a img{ border:none;}
+/*---------------*/
+.title{ font-size:16px; font-weight:bold;font-family:"lucida Grande", Verdana;}
+.title .user{ color:#3d5e86; }
+.mail-notread{ background-image:url(/img/mailNotRead.png); background-repeat:no-repeat; padding-left:22px; background-position:0px 4px;}
+.border-line{background-image: url("/img/sidebar_divider2.png"); background-repeat: repeat-x; height: 2px;}
+.copyright{ color:#cbcbcb; font-size:12px;}
+/*---------------*/
+.infor-box{border:1px solid #c8cfda; padding:0px;}
+.box-title{border-bottom:1px solid #c8cfda; background-color:rgb(244, 246, 248); font-size:14px; line-height:30px; padding:0px 10px;}
+.box-content{ padding:0px 20px;}
+.box-subtitle{ color:#aaa;}

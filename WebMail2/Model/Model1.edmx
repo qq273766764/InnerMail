@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="mailModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="mailModelStoreContainer">
+          <EntitySet Name="Attachments" EntityType="mailModel.Store.Attachments" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MailInfo" EntityType="mailModel.Store.MailInfo" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MailState" EntityType="mailModel.Store.MailState" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="View_AllMail_NoGUID" EntityType="mailModel.Store.View_AllMail_NoGUID" store:Type="Views" store:Schema="dbo" store:Name="View_AllMail_NoGUID">
+            <DefiningQuery>SELECT 
+      [View_AllMail_NoGUID].[mid] AS [mid], 
+      [View_AllMail_NoGUID].[MailId] AS [MailId], 
+      [View_AllMail_NoGUID].[Level] AS [Level], 
+      [View_AllMail_NoGUID].[SendFromName] AS [SendFromName], 
+      [View_AllMail_NoGUID].[SendFromId] AS [SendFromId], 
+      [View_AllMail_NoGUID].[ID] AS [ID], 
+      [View_AllMail_NoGUID].[AddresseeIds] AS [AddresseeIds], 
+      [View_AllMail_NoGUID].[Subject] AS [Subject], 
+      [View_AllMail_NoGUID].[SendTime] AS [SendTime], 
+      [View_AllMail_NoGUID].[IsDraft] AS [IsDraft], 
+      [View_AllMail_NoGUID].[AddresseeNames] AS [AddresseeNames], 
+      [View_AllMail_NoGUID].[UName] AS [UName], 
+      [View_AllMail_NoGUID].[Uid] AS [Uid], 
+      [View_AllMail_NoGUID].[IsRead] AS [IsRead], 
+      [View_AllMail_NoGUID].[ReadTime] AS [ReadTime], 
+      [View_AllMail_NoGUID].[IsDel] AS [IsDel], 
+      [View_AllMail_NoGUID].[StateID] AS [StateID], 
+      [View_AllMail_NoGUID].[DelTime] AS [DelTime], 
+      [View_AllMail_NoGUID].[IsDustbinInbox] AS [IsDustbinInbox], 
+      [View_AllMail_NoGUID].[DustbinTimeInbox] AS [DustbinTimeInbox], 
+      [View_AllMail_NoGUID].[IsDustbinOutbox] AS [IsDustbinOutbox], 
+      [View_AllMail_NoGUID].[DustbinTimeOutbox] AS [DustbinTimeOutbox]
+      FROM [dbo].[View_AllMail_NoGUID] AS [View_AllMail_NoGUID]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Attachments_MailInfo" Association="mailModel.Store.FK_Attachments_MailInfo">
+            <End Role="MailInfo" EntitySet="MailInfo" />
+            <End Role="Attachments" EntitySet="Attachments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Attachments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MailId" Type="int" />
+          <Property Name="FileName" Type="varchar" MaxLength="500" />
+          <Property Name="FilePath" Type="varchar" MaxLength="1000" />
+          <Property Name="FileSize" Type="float" />
+          <Property Name="FileId" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="MailInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Level" Type="int" />
+          <Property Name="SendFromName" Type="varchar" MaxLength="500" />
+          <Property Name="SendFromId" Type="varchar" MaxLength="500" />
+          <Property Name="AddresseeIds" Type="text" />
+          <Property Name="Subject" Type="varchar" MaxLength="500" />
+          <Property Name="Content" Type="text" />
+          <Property Name="SendTime" Type="datetime" />
+          <Property Name="IsDraft" Type="bit" />
+          <Property Name="AddresseeNames" Type="text" />
+        </EntityType>
+        <EntityType Name="MailState">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MailId" Type="int" />
+          <Property Name="UName" Type="varchar" MaxLength="500" />
+          <Property Name="Uid" Type="varchar" MaxLength="500" />
+          <Property Name="IsRead" Type="bit" />
+          <Property Name="ReadTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" />
+          <Property Name="DelTime" Type="datetime" />
+          <Property Name="IsDustbinInbox" Type="bit" />
+          <Property Name="DustbinTimeInbox" Type="datetime" />
+          <Property Name="IsDustbinOutbox" Type="bit" />
+          <Property Name="DustbinTimeOutbox" Type="datetime" />
+        </EntityType>
+        <!--生成过程中发现错误:
+      警告 6002: 表/视图“mail.dbo.View_AllMail_NoGUID”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="View_AllMail_NoGUID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="mid" Type="numeric" />
+          <Property Name="MailId" Type="int" />
+          <Property Name="Level" Type="int" />
+          <Property Name="SendFromName" Type="varchar" MaxLength="500" />
+          <Property Name="SendFromId" Type="varchar" MaxLength="500" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="AddresseeIds" Type="text" />
+          <Property Name="Subject" Type="varchar" MaxLength="500" />
+          <Property Name="SendTime" Type="datetime" />
+          <Property Name="IsDraft" Type="bit" />
+          <Property Name="AddresseeNames" Type="text" />
+          <Property Name="UName" Type="varchar" MaxLength="500" />
+          <Property Name="Uid" Type="varchar" MaxLength="500" />
+          <Property Name="IsRead" Type="bit" />
+          <Property Name="ReadTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" />
+          <Property Name="StateID" Type="numeric" />
+          <Property Name="DelTime" Type="datetime" />
+          <Property Name="IsDustbinInbox" Type="bit" />
+          <Property Name="DustbinTimeInbox" Type="datetime" />
+          <Property Name="IsDustbinOutbox" Type="bit" />
+          <Property Name="DustbinTimeOutbox" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Attachments_MailInfo">
+          <End Role="MailInfo" Type="mailModel.Store.MailInfo" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attachments" Type="mailModel.Store.Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Attachments">
+              <PropertyRef Name="MailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="mailModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="mailEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attachments" EntityType="mailModel.Attachments" />
+          <EntitySet Name="MailInfo" EntityType="mailModel.MailInfo" />
+          <EntitySet Name="MailState" EntityType="mailModel.MailState" />
+          <EntitySet Name="View_AllMail_NoGUID" EntityType="mailModel.View_AllMail_NoGUID" />
+          <AssociationSet Name="FK_Attachments_MailInfo" Association="mailModel.FK_Attachments_MailInfo">
+            <End Role="MailInfo" EntitySet="MailInfo" />
+            <End Role="Attachments" EntitySet="Attachments" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Attachments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MailId" Type="Int32" />
+          <Property Name="FileName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="FilePath" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="FileSize" Type="Double" />
+          <Property Name="FileId" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="MailInfo" Relationship="mailModel.FK_Attachments_MailInfo" FromRole="Attachments" ToRole="MailInfo" />
+        </EntityType>
+        <EntityType Name="MailInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Level" Type="Int32" />
+          <Property Name="SendFromName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="SendFromId" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="AddresseeIds" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Subject" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="SendTime" Type="DateTime" />
+          <Property Name="IsDraft" Type="Boolean" />
+          <Property Name="AddresseeNames" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Attachments" Relationship="mailModel.FK_Attachments_MailInfo" FromRole="MailInfo" ToRole="Attachments" />
+        </EntityType>
+        <EntityType Name="MailState">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Decimal" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MailId" Type="Int32" />
+          <Property Name="UName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Uid" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="IsRead" Type="Boolean" />
+          <Property Name="ReadTime" Type="DateTime" />
+          <Property Name="IsDel" Type="Boolean" />
+          <Property Name="DelTime" Type="DateTime" />
+          <Property Name="IsDustbinInbox" Type="Boolean" />
+          <Property Name="DustbinTimeInbox" Type="DateTime" />
+          <Property Name="IsDustbinOutbox" Type="Boolean" />
+          <Property Name="DustbinTimeOutbox" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="View_AllMail_NoGUID">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="mid" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="MailId" Type="Int32" />
+          <Property Name="Level" Type="Int32" />
+          <Property Name="SendFromName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="SendFromId" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="AddresseeIds" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Subject" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="SendTime" Type="DateTime" />
+          <Property Name="IsDraft" Type="Boolean" />
+          <Property Name="AddresseeNames" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="UName" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Uid" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="IsRead" Type="Boolean" />
+          <Property Name="ReadTime" Type="DateTime" />
+          <Property Name="IsDel" Type="Boolean" />
+          <Property Name="StateID" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="DelTime" Type="DateTime" />
+          <Property Name="IsDustbinInbox" Type="Boolean" />
+          <Property Name="DustbinTimeInbox" Type="DateTime" />
+          <Property Name="IsDustbinOutbox" Type="Boolean" />
+          <Property Name="DustbinTimeOutbox" Type="DateTime" />
+        </EntityType>
+        <Association Name="FK_Attachments_MailInfo">
+          <End Role="MailInfo" Type="mailModel.MailInfo" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Attachments" Type="mailModel.Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Attachments">
+              <PropertyRef Name="MailId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="mailModelStoreContainer" CdmEntityContainer="mailEntities">
+          <EntitySetMapping Name="Attachments"><EntityTypeMapping TypeName="mailModel.Attachments"><MappingFragment StoreEntitySet="Attachments">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="MailId" ColumnName="MailId" />
+            <ScalarProperty Name="FileName" ColumnName="FileName" />
+            <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+            <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+            <ScalarProperty Name="FileId" ColumnName="FileId" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MailInfo"><EntityTypeMapping TypeName="mailModel.MailInfo"><MappingFragment StoreEntitySet="MailInfo">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="Level" ColumnName="Level" />
+            <ScalarProperty Name="SendFromName" ColumnName="SendFromName" />
+            <ScalarProperty Name="SendFromId" ColumnName="SendFromId" />
+            <ScalarProperty Name="AddresseeIds" ColumnName="AddresseeIds" />
+            <ScalarProperty Name="Subject" ColumnName="Subject" />
+            <ScalarProperty Name="Content" ColumnName="Content" />
+            <ScalarProperty Name="SendTime" ColumnName="SendTime" />
+            <ScalarProperty Name="IsDraft" ColumnName="IsDraft" />
+            <ScalarProperty Name="AddresseeNames" ColumnName="AddresseeNames" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MailState"><EntityTypeMapping TypeName="mailModel.MailState"><MappingFragment StoreEntitySet="MailState">
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="MailId" ColumnName="MailId" />
+            <ScalarProperty Name="UName" ColumnName="UName" />
+            <ScalarProperty Name="Uid" ColumnName="Uid" />
+            <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+            <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+            <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+            <ScalarProperty Name="DelTime" ColumnName="DelTime" />
+            <ScalarProperty Name="IsDustbinInbox" ColumnName="IsDustbinInbox" />
+            <ScalarProperty Name="DustbinTimeInbox" ColumnName="DustbinTimeInbox" />
+            <ScalarProperty Name="IsDustbinOutbox" ColumnName="IsDustbinOutbox" />
+            <ScalarProperty Name="DustbinTimeOutbox" ColumnName="DustbinTimeOutbox" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="View_AllMail_NoGUID"><EntityTypeMapping TypeName="mailModel.View_AllMail_NoGUID"><MappingFragment StoreEntitySet="View_AllMail_NoGUID">
+            <ScalarProperty Name="mid" ColumnName="mid" />
+            <ScalarProperty Name="MailId" ColumnName="MailId" />
+            <ScalarProperty Name="Level" ColumnName="Level" />
+            <ScalarProperty Name="SendFromName" ColumnName="SendFromName" />
+            <ScalarProperty Name="SendFromId" ColumnName="SendFromId" />
+            <ScalarProperty Name="ID" ColumnName="ID" />
+            <ScalarProperty Name="AddresseeIds" ColumnName="AddresseeIds" />
+            <ScalarProperty Name="Subject" ColumnName="Subject" />
+            <ScalarProperty Name="SendTime" ColumnName="SendTime" />
+            <ScalarProperty Name="IsDraft" ColumnName="IsDraft" />
+            <ScalarProperty Name="AddresseeNames" ColumnName="AddresseeNames" />
+            <ScalarProperty Name="UName" ColumnName="UName" />
+            <ScalarProperty Name="Uid" ColumnName="Uid" />
+            <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+            <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+            <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+            <ScalarProperty Name="StateID" ColumnName="StateID" />
+            <ScalarProperty Name="DelTime" ColumnName="DelTime" />
+            <ScalarProperty Name="IsDustbinInbox" ColumnName="IsDustbinInbox" />
+            <ScalarProperty Name="DustbinTimeInbox" ColumnName="DustbinTimeInbox" />
+            <ScalarProperty Name="IsDustbinOutbox" ColumnName="IsDustbinOutbox" />
+            <ScalarProperty Name="DustbinTimeOutbox" ColumnName="DustbinTimeOutbox" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model1">
+        <EntityTypeShape EntityType="mailModel.Attachments" Width="1.5" PointX="3" PointY="1.25" Height="2.1280729166666665" IsExpanded="true" />
+        <EntityTypeShape EntityType="mailModel.MailInfo" Width="1.5" PointX="0.75" PointY="1" Height="2.8025520833333326" IsExpanded="true" />
+        <EntityTypeShape EntityType="mailModel.MailState" Width="1.5" PointX="0.75" PointY="4.75" Height="2.9711718749999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="mailModel.View_AllMail_NoGUID" Width="1.5" PointX="2.75" PointY="4.75" Height="4.6573697916666656" IsExpanded="true" />
+        <AssociationConnector Association="mailModel.FK_Attachments_MailInfo" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.3140364583333333" />
+          <ConnectorPoint PointX="3" PointY="2.3140364583333333" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

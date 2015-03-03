@@ -1,0 +1,33 @@
+﻿/*基础样式*/
+.clear,
+.clear5,
+.clear10,
+.clear20 { clear: both;display: block;overflow: hidden; border:none;}
+.clear5{ height:5px;}
+.clear10{ height:10px;}
+.clear20{ height:20px;}
+html,
+body,
+form{ font-size:12px; line-height:20px; font-family:tahoma,arial,宋体; color:#333; height:100%; width:100%; padding:0px; margin:0px; background-repeat:no-repeat;}
+a{text-decoration:none; color:Black;}
+a img{ border:none;}
+/*---------------*/
+.menu-line{background-image: url("../img/sidebar_divider2.png"); background-repeat: repeat-x; height: 2px; margin:0px 10px;}
+.menu-big,
+.menu-normal{ color:#354b66; font-family:"lucida Grande",Verdana; display:block; overflow:hidden; cursor:pointer; padding-top:2px; padding-bottom:2px;}
+.menu-big:hover,
+.menu-normal:hover{ background-color:#e8ebef;}
+.menu-big{ font-size:14px; font-weight:bold; line-height:24px; height:24px;padding-left:50px; background-repeat:no-repeat; background-image:url(../img/menu.gif); background-position-x:20px;}
+.menu-big-send{ background-position-y:4px;}
+.menu-big-request{ background-position-y:-28px;}
+.menu-normal{ font-family:"lucida Grande",Verdana; font-size:12px; line-height:22px; height:22px; padding-left:22px;}
+.menu-normal a{width:100%; display:block;}
+.menu-normal-sc{ padding-left:46px; background-image:url(../img/t.gif); background-repeat:no-repeat; background-position:24px 0px;}
+.menu-selected{background-color:rgb(104, 123, 144);color:white; }
+.menu-selected a{color:white; font-weight:bold; }
+.menu-setting{padding-left:22px; font-size:12px; line-height:24px;}
+.menu-setting a{ color:Gray;}
+.menu-setting a:hover{ color:Red;}
+
+.copyright{ color:#cbcbcb; font-size:12px;}
+
