@@ -104,7 +104,7 @@ namespace WebMail2.Codes
             {
                 SaveMailSates();
                 _IsInitCheck = false;
-                Thread.Sleep((MailStateSleepTime + MailStateSleepTimeAdd)*1000);
+                Thread.Sleep((MailStateSleepTime + MailStateSleepTimeAdd) * 1000);
             }
         }
         /// <summary>
@@ -112,14 +112,17 @@ namespace WebMail2.Codes
         /// </summary>
         private static void SaveMailSates()
         {
+            DateTime starttime;
+            Model.mailEntities DataEntity;
+            List<Model.MailState> Datas;
             try
             {
                 //如果是空队列，休眠时间增量为30秒
-                if (StateQueue.Count == 0) { MailStateSleepTimeAdd = 30; return; } else { MailStateSleepTimeAdd = 0;}
-                DateTime starttime = DateTime.Now;
-                List<Model.MailState> Datas = new List<Model.MailState>();
+                if (StateQueue.Count == 0) { MailStateSleepTimeAdd = 30; return; } else { MailStateSleepTimeAdd = 0; }
+                Datas = new List<Model.MailState>();
+                starttime = DateTime.Now;
                 int Count = StateQueue.Count > SaveMailCount ? SaveMailCount : StateQueue.Count;
-                using (var DataEntity = new Model.mailEntities())
+                using (DataEntity = new Model.mailEntities())
                 {
                     for (int i = 0; i < Count; i++)
                     {
@@ -133,6 +136,11 @@ namespace WebMail2.Codes
             catch (Exception exp)
             {
                 Codes.LoggerHelper.MailLogger.Error("【邮件发送线程】发送邮件队列出错！", exp);
+            }
+            finally
+            {
+                DataEntity = null;
+                Datas = null;
             }
         }
         /// <summary>
@@ -152,7 +160,7 @@ namespace WebMail2.Codes
                     var MailAddrs = mail.AddresseeIds.Split(',');
                     var MailAddrNames = mail.AddresseeNames.Split(',');
                     Dictionary<string, string> DicIDNames = new Dictionary<string, string>();
-                    for (int i = 0; i < MailAddrs.Length; i++) { if (!string.IsNullOrWhiteSpace(MailAddrs[i]) && MailAddrs[i] != mail.SendFromId)  {  DicIDNames.Add(MailAddrs[i], MailAddrNames[i]); } }
+                    for (int i = 0; i < MailAddrs.Length; i++) { if (!string.IsNullOrWhiteSpace(MailAddrs[i]) && MailAddrs[i] != mail.SendFromId) { DicIDNames.Add(MailAddrs[i], MailAddrNames[i]); } }
                     var AddrCount = DicIDNames.Count;
                     var MailStates = DataEntity.MailState.Where(i => i.MailId == mail.ID && i.Uid != mail.SendFromId);
                     var StateCont = MailStates.Count();
@@ -160,7 +168,7 @@ namespace WebMail2.Codes
                     if (AddrCount > StateCont)
                     {
                         var StateUsers = MailStates.Select(i => i.Uid).ToArray();
-                        var ExceptUsers = MailAddrs.Except(StateUsers).Except(new string[]{mail.SendFromId}) ;
+                        var ExceptUsers = MailAddrs.Except(StateUsers).Except(new string[] { mail.SendFromId });
                         foreach (var uid in ExceptUsers)
                         {
                             Model.MailState data = new Model.MailState()

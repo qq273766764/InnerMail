@@ -27,26 +27,28 @@ namespace WebMail2.Server
                 int data_count = 0;
                 var user = new Codes.CodeHelper().GetCurrentUserInfo();
                 var userID = user.UserID;
+                var DataProvider = new Codes.DataProvider();
                 switch (MailType)
                 {
                     case Codes.EnumMailType.InMail://收件箱
-                        var InMailData = new Codes.DataProvider().QueryReciveMailBox(userID, req_key, req_page, req_rows, out data_count);
+                        var InMailData = DataProvider.QueryReciveMailBox(userID, req_key, req_page, req_rows, out data_count);
                         context.Response.Write(WriteJsonData(data_count, InMailData));
                         break;
                     case Codes.EnumMailType.OutMail://发件箱
-                        var OutMailDatas = new Codes.DataProvider().QuerySendMailBox(userID, false, req_key, req_page, req_rows, out data_count);
+                        var OutMailDatas = DataProvider.QuerySendMailBox(userID, false, req_key, req_page, req_rows, out data_count);
                         context.Response.Write(WriteJsonData(data_count, OutMailDatas));
                         break;
 
                     case Codes.EnumMailType.DraftMail://草稿箱
-                        var DraftMailDatas = new Codes.DataProvider().QuerySendMailBox(userID, true, req_key, req_page, req_rows, out data_count);
+                        var DraftMailDatas = DataProvider.QuerySendMailBox(userID, true, req_key, req_page, req_rows, out data_count);
                         context.Response.Write(WriteJsonData(data_count, DraftMailDatas));
                         break;
                     case Codes.EnumMailType.DustMail://垃圾箱(发件箱)
-                        var DustMailDatas = new Codes.DataProvider().QueryDustbinBox(userID, req_key, req_page, req_rows, out data_count);
+                        var DustMailDatas = DataProvider.QueryDustbinBox(userID, req_key, req_page, req_rows, out data_count);
                         context.Response.Write(WriteJsonData(data_count, DustMailDatas));
                         break;
                 }
+                DataProvider = null;
             }
             catch (Exception exp)
             {

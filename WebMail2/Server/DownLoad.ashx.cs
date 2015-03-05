@@ -54,6 +54,9 @@ namespace WebMail2.Server
                 context.Response.ContentType = "text/html, application/xhtml+xml, */*";
                 context.Response.Write(string.Format("<script type='text/javascript'>alert('{0}');</script>", exp.Message.Replace("'", "‘")));
             }
+            finally{
+                context.Response.End();
+            }
         }
 
         public bool IsReusable
@@ -61,6 +64,62 @@ namespace WebMail2.Server
             get
             {
                 return false;
+            }
+        }
+
+        protected void DownLoadLargeFile(string fileName, string filePath)
+        {
+            System.IO.Stream iStream = null;
+            // Buffer to read 10K bytes in chunk:
+            byte[] buffer = new Byte[10000];
+            // Length of the file:
+            int length;
+            // Total bytes to read.
+            long dataToRead;
+            try
+            {
+                // Open the file.
+                iStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read);
+                // Total bytes to read.
+                dataToRead = iStream.Length;
+                HttpContext.Current.Response.ContentType = "text/plain"; // Set the file type
+                HttpContext.Current.Response.AddHeader("Content-Length", dataToRead.ToString());
+                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName);
+                // Read the bytes.
+                while (dataToRead > 0)
+                {
+                    // Verify that the client is connected.
+                    if (HttpContext.Current.Response.IsClientConnected)
+                    {
+                        // Read the data in buffer.
+                        length = iStream.Read(buffer, 0, 10000);
+                        // Write the data to the current output stream.
+                        HttpContext.Current.Response.OutputStream.Write(buffer, 0, length);
+                        // Flush the data to the HTML output.
+                        HttpContext.Current.Response.Flush();
+                        buffer = new Byte[10000];
+                        dataToRead = dataToRead - length;
+                    }
+                    else
+                    {
+                        // Prevent infinite loop if user disconnects
+                        dataToRead = -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Trap the error, if any.
+                HttpContext.Current.Response.Write("Error : " + ex.Message);
+            }
+            finally
+            {
+                if (iStream != null)
+                {
+                    //Close the file.
+                    iStream.Close();
+                }
+                HttpContext.Current.Response.End();
             }
         }
     }

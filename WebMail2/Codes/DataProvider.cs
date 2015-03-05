@@ -15,6 +15,11 @@ namespace WebMail2.Codes
             DataEntity = new Model.mailEntities();
         }
 
+        ~DataProvider() {
+            DataEntity.Dispose();
+            DataEntity = null;
+        }
+
         #region Query
         /// <summary>
         /// 阅读邮件
