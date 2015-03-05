@@ -10,33 +10,37 @@ namespace WebMail2.Codes
     /// <summary>
     /// 检查删除邮件线程
     /// </summary>
-    public static class MailDeleteThread
+    public class MailDeleteThread
     {
         #region Config
         /// <summary>
         /// 邮件删除线程休眠时间
         /// </summary>
-        private static int MailDeleteSleepTime { get { return Convert.ToInt32(ConfigurationManager.AppSettings["MailDeleteSleepTime"]); } }
+        //int MailDeleteSleepTime { get { return Convert.ToInt32(ConfigurationManager.AppSettings["MailDeleteSleepTime"]); } }
+
 
         /// <summary>
         /// 跳过最近的邮件，防止邮件删除与发邮件冲突。造成邮件发送不成功！
         /// </summary>
-        private static int NotDeleteMailCount = 200;
+        int NotDeleteMailCount = 200;
         #endregion
 
-        private static Queue<int> _DeleteMailIDQueue;
-        private static Queue<int> DeleteMailIDQueue { get { if (_DeleteMailIDQueue == null) { _DeleteMailIDQueue = new Queue<int>(); } return _DeleteMailIDQueue; } }
-
+        Queue<int> DeleteMailIDQueue { get { if (_DeleteMailIDQueue == null) { _DeleteMailIDQueue = new Queue<int>(); } return _DeleteMailIDQueue; } }
+        Queue<int> _DeleteMailIDQueue;
+        public static bool IsInitCheck { get { return _IsInitCheck; } }
+        static bool _IsInitCheck;
         public static void Init()
         {
             LoggerHelper.MailLogger.Info("【自动删除线程】邮件删除线程启动成功，初始化开始！");
             _IsInitCheck = true;
-            CheckDeleteMail(200,true);
+            var mailDeleteThread = new MailDeleteThread();
+            mailDeleteThread.CheckDeleteMail(200, true);
+            mailDeleteThread = null;
             _IsInitCheck = false;
             LoggerHelper.MailLogger.Info("【自动删除线程】初始化完成！");
         }
 
-        public static void CheckDeleteMail(int delcount,bool CheckMailCount=false)
+        public void CheckDeleteMail(int delcount, bool CheckMailCount = false)
         {
             try
             {
@@ -56,11 +60,12 @@ namespace WebMail2.Codes
                             .Skip(NotDeleteMailCount)
                             .Select(i => i.ID);
                         foreach (var mailid in MailIDs) { DeleteMailIDQueue.Enqueue(mailid); }
-                        Codes.LoggerHelper.MailLogger.Info(string.Format("【自动删除线程】已找出{0}封待删除邮件，耗时：{1}ms", DeleteMailIDQueue.Count,(DateTime.Now-start).TotalMilliseconds));
+                        MailIDs = null;
+                        Codes.LoggerHelper.MailLogger.Info(string.Format("【自动删除线程】已找出{0}封待删除邮件，耗时：{1}ms", DeleteMailIDQueue.Count, (DateTime.Now - start).TotalMilliseconds));
                     }
                     if (DeleteMailIDQueue.Count == 0) return;
+
                     //从队列里取出几条待删除
-                    
                     List<int> DelIDs = new List<int>();
                     for (int i = 0; i < delcount; i++) { if (DeleteMailIDQueue.Count > 0) DelIDs.Add(DeleteMailIDQueue.Dequeue()); }
                     if (DelIDs.Count == 0) return;
@@ -79,15 +84,14 @@ namespace WebMail2.Codes
                     DateTime delStartTime = DateTime.Now;
                     DataEntity.SaveChanges(System.Data.Objects.SaveOptions.None);
                     Codes.LoggerHelper.MailLogger.Info(string.Format("【自动删除线程】已自动删除{0}封邮件，耗时:{1}ms", DelIDs.Count, (DateTime.Now - delStartTime).TotalMilliseconds.ToString("0")));
+                    DelIDs.Clear();
+                    DelIDs = null;
                 }
-
             }
             catch (Exception exp)
             {
                 Codes.LoggerHelper.MailLogger.Error("【自动删除线程】检查删除邮件出错！", exp);
             }
         }
-        private static bool _IsInitCheck;
-        public static bool IsInitCheck { get { return _IsInitCheck; } }
     }
 }
